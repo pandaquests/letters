@@ -1,3 +1,18 @@
 #myCanvas {
     display: none;
 }
+
+.letter {
+	display: inline-block;
+	text-align: center;
+	border: 1px solid black;
+}
+
+.letter img {
+	display: block;
+		border: 1px solid black;
+}
+
+.letter button {
+	margin: 5px;
+}

@@ -1,5 +1,7 @@
 // Create a new FontFace object
-const urlPath = "path/to/your/font.TTF";
+const fileType = "TTF"
+const fileName = "clouds";
+const urlPath = `font/${fileName}.${fileType}`;
 const customFont = new FontFace('customFont', `url(${urlPath})`);
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -29,6 +31,8 @@ customFont.load().then(loadedFont => {
     document.fonts.add(loadedFont);
     const canvas = document.getElementById("myCanvas");
     const container = document.getElementById('image-container');
+    const bulkDownload = document.getElementById('buldDownload');
+
     const ctx = canvas.getContext("2d");
     const fontFamily = "customFont";
     const textHeight = 139;
@@ -61,18 +65,31 @@ customFont.load().then(loadedFont => {
         const image = document.createElement('img');
         image.src = dataURL;
 
+        const div = document.createElement('div');
+        div.className="letter";
+        div.appendChild(image);
         // Append the image to the container element
-        container.appendChild(image);
 
         // Create a Blob from the data URL
         const blob = dataURLToBlob(dataURL);
         zip.file(`${letter}.png`, blob, { binary: true });
-        
+
+        const anchor = document.createElement('a');
+        anchor.href = dataURL;
+        anchor.download = `${letter}.png`;
+        const button = document.createElement('button');
+        button.innerHTML = 'Download';
+        anchor.appendChild(button);
+        div.appendChild(anchor);
+        container.appendChild(div);
+
     });
 
-    // Generate the zip file as a Blob
-    zip.generateAsync({ type: "blob" }).then(zipFile => {
-        // Trigger a download of the zip file
-        saveAs(zipFile, "letters.zip");
+    bulkDownload.addEventListener('click', () => {
+        // Generate the zip file as a Blob
+        zip.generateAsync({ type: "blob" }).then(zipFile => {
+            // Trigger a download of the zip file
+            saveAs(zipFile, `${fileName}.zip`);
+        });
     });
 });
